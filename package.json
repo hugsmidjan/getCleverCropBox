@@ -1,0 +1,23 @@
+{
+  "name": "@hugsmidjan/getclevercropbox",
+  "version": "0.0.0",
+	"main": "dist/getCleverCropBox.js",
+	"module": "src/getCleverCropBox.js",
+	"types": "src/getCleverCropBox.d.ts",
+  "repository": "git@github.com:hugsmidjan/getCleverCropBox.git",
+  "author": "Hugsmiðjan ehf. (www.hugsmidjan.is)",
+	"license": "UNLICENCED",
+	"scripts": {
+		"prepublish": "yarn run build",
+		"build": "NODE_ENV=production  gulp build  &&  yarn run test",
+		"dev": "gulp dev",
+		"test": "ospec 'tests/**/*.js'",
+    "test:dev": "yarn run test  &&  onchange 'tests/**' -f add,change -- yarn run test"
+	},
+  "devDependencies": {
+    "@hugsmidjan/gulp-rollup": "^0.3.12",
+    "gulp": "^4.0.2",
+    "onchange": "^6.1.0",
+    "ospec": "^4.0.1"
+  }
+}

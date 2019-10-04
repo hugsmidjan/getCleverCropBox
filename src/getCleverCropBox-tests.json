@@ -1,0 +1,1852 @@
+[
+  {
+    "name": "No scaling requirements in input return null",
+    "input": {
+      "imageSize": { "width": 1000, "height": 600 },
+      "cropInfo": {}
+    },
+    "expected": null
+  },
+
+  {
+    "name": "Simple resizing (width)",
+    "input": {
+      "imageSize": { "width": 1000, "height": 600 },
+      "cropInfo": {
+        "width": 300
+      },
+      "focalPoint": { "fx": 50, "fy": 50 }
+    },
+    "expected": {
+      "doResize": true,
+      "scaledWidth": 300,
+      "scaledHeight": 180,
+      "doCrop": false,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Simple resizing (skipping focalPoint is allowed)",
+    "input": {
+      "imageSize": { "width": 1000, "height": 600 },
+      "cropInfo": {
+        "width": 300
+      }
+    },
+    "expected": {
+      "doResize": true,
+      "scaledWidth": 300,
+      "scaledHeight": 180,
+      "doCrop": false,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "off-center focalpoint should not influence simple resizing",
+    "input": {
+      "imageSize": { "width": 1000, "height": 600 },
+      "cropInfo": {
+        "width": 500
+      },
+      "focalPoint": { "fx": 0, "fy": 0 }
+    },
+    "expected": {
+      "doResize": true,
+      "scaledWidth": 500,
+      "scaledHeight": 300,
+      "doCrop": false,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "rectangle should not influence simple resizing",
+    "input": {
+      "imageSize": { "width": 1000, "height": 600 },
+      "cropInfo": {
+        "width": 500
+      },
+      "focalPoint": { "fx": 10, "fy": 10, "r1x": 0, "r1y": 0, "r2x": 20, "r2y": 20 }
+    },
+    "expected": {
+      "doResize": true,
+      "scaledWidth": 500,
+      "scaledHeight": 300,
+      "doCrop": false,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Simple resizing (height)",
+    "input": {
+      "imageSize": { "width": 1000, "height": 600 },
+      "cropInfo": {
+        "height": 300
+      }
+    },
+    "expected": {
+      "doResize": true,
+      "scaledWidth": 500,
+      "scaledHeight": 300,
+      "doCrop": false,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Simple resizing (width and height)",
+    "input": {
+      "imageSize": { "width": 1000, "height": 600 },
+      "cropInfo": {
+        "width": 300,
+        "height": 300
+      }
+    },
+    "expected": {
+      "doResize": true,
+      "scaledWidth": 300,
+      "scaledHeight": 180,
+      "doCrop": false,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Simple resizing (image lower than specified height)",
+    "input": {
+      "imageSize": { "width": 1000, "height": 600 },
+      "cropInfo": {
+        "width": 800,
+        "height": 800
+      }
+    },
+    "expected": {
+      "doResize": true,
+      "scaledWidth": 800,
+      "scaledHeight": 480,
+      "doCrop": false,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Simple resizing (image narrower than specified width)",
+    "input": {
+      "imageSize": { "width": 1000, "height": 600 },
+      "cropInfo": {
+        "width": 1200,
+        "height": 400
+      }
+    },
+    "expected": {
+      "doResize": true,
+      "scaledWidth": 667,
+      "scaledHeight": 400,
+      "doCrop": false,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Image same size as scaling box",
+    "input": {
+      "imageSize": { "width": 1000, "height": 600 },
+      "cropInfo": {
+        "width": 1000,
+        "height": 600
+      }
+    },
+    "expected": {
+      "doResize": false,
+      "doCrop": false,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Image smaller than scaling box (width + height)",
+    "input": {
+      "imageSize": { "width": 1000, "height": 600 },
+      "cropInfo": {
+        "width": 1200,
+        "height": 1200
+      }
+    },
+    "expected": {
+      "doResize": false,
+      "doCrop": false,
+      "tooSmall": true,
+      "targetWidth": 1200,
+      "targetHeight": 720
+    }
+  },
+
+  {
+    "name": "Image smaller than scaling box (width only)",
+    "input": {
+      "imageSize": { "width": 1000, "height": 600 },
+      "cropInfo": {
+        "width": 1200
+      }
+    },
+    "expected": {
+      "doResize": false,
+      "doCrop": false,
+      "tooSmall": true,
+      "targetWidth": 1200,
+      "targetHeight": 720
+    }
+  },
+
+  {
+    "name": "Image smaller than scaling box (height only)",
+    "input": {
+      "imageSize": { "width": 1000, "height": 600 },
+      "cropInfo": {
+        "height": 1200
+      }
+    },
+    "expected": {
+      "doResize": false,
+      "doCrop": false,
+      "tooSmall": true,
+      "targetHeight": 1200,
+      "targetWidth": 2000
+    }
+  },
+
+  {
+    "name": "Cropping without width or height returns null",
+    "input": {
+      "imageSize": { "width": 1000, "height": 600 },
+      "cropInfo": {
+        "minRatioX": 2,
+        "minRatioY": 1,
+        "maxRatioX": 2,
+        "maxRatioY": 1
+      }
+    },
+    "expected": null
+  },
+
+  {
+    "name": "Crop with Height set above the possible crop-height",
+    "input": {
+      "imageSize": { "width": 1000, "height": 600 },
+      "cropInfo": {
+        "width": 600,
+        "height": 550,
+        "minRatioX": 2,
+        "minRatioY": 1,
+        "maxRatioX": 2,
+        "maxRatioY": 1
+      }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 0,
+      "yPos": 50,
+      "cropWidth": 1000,
+      "cropHeight": 500,
+      "doResize": true,
+      "scaledWidth": 600,
+      "scaledHeight": 300,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Crop with Height set above the possible crop-height",
+    "input": {
+      "imageSize": { "width": 1000, "height": 600 },
+      "cropInfo": {
+        "width": 600,
+        "height": 550,
+        "zoom": 101,
+        "minRatioX": 2,
+        "minRatioY": 1,
+        "maxRatioX": 2,
+        "maxRatioY": 1
+      }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 5,
+      "yPos": 52,
+      "cropWidth": 990,
+      "cropHeight": 495,
+      "doResize": true,
+      "scaledWidth": 600,
+      "scaledHeight": 300,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Image aspect ratio above maxRatio but too narrow to warrant cropping",
+    "input": {
+      "imageSize": { "width": 1000, "height": 600 },
+      "cropInfo": {
+        "width": 1000,
+        "minRatioX": 10,
+        "minRatioY": 12,
+        "maxRatioX": 12,
+        "maxRatioY": 10
+      }
+    },
+    "expected": {
+      "doCrop": false,
+      "doResize": false,
+      "tooSmall": true,
+      "targetWidth": 1000,
+      "targetHeight": 833
+    }
+  },
+
+  {
+    "name": "Image aspect ratio above maxRatio but too narrow to warrant cropping",
+    "input": {
+      "imageSize": { "width": 1000, "height": 600 },
+      "cropInfo": {
+        "width": 1000,
+        "height": 1000,
+        "minRatioX": 10,
+        "minRatioY": 12,
+        "maxRatioX": 12,
+        "maxRatioY": 10
+      }
+    },
+    "expected": {
+      "doCrop": false,
+      "doResize": false,
+      "tooSmall": true,
+      "targetWidth": 1000,
+      "targetHeight": 833
+    }
+  },
+
+  {
+    "name": "Image aspect ratio above maxRatio - requires cropping",
+    "input": {
+      "imageSize": { "width": 1000, "height": 600 },
+      "cropInfo": {
+        "width": 500,
+        "minRatioX": 10,
+        "minRatioY": 12,
+        "maxRatioX": 12,
+        "maxRatioY": 10
+      }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 140,
+      "yPos": 0,
+      "cropWidth": 720,
+      "cropHeight": 600,
+      "doResize": true,
+      "scaledWidth": 500,
+      "scaledHeight": 417,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Aspect ratio may be floating-point numbers",
+    "input": {
+      "imageSize": { "width": 1000, "height": 600 },
+      "cropInfo": {
+        "width": 500,
+        "minRatioX": 0.1,
+        "minRatioY": 0.12,
+        "maxRatioX": 0.12,
+        "maxRatioY": 0.1
+      }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 140,
+      "yPos": 0,
+      "cropWidth": 720,
+      "cropHeight": 600,
+      "doResize": true,
+      "scaledWidth": 500,
+      "scaledHeight": 417,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Image aspect ratio below minRatio - requires cropping",
+    "input": {
+      "imageSize": { "width": 600, "height": 1000 },
+      "cropInfo": {
+        "width": 500,
+        "minRatioX": 10,
+        "minRatioY": 12,
+        "maxRatioX": 12,
+        "maxRatioY": 10
+      }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 0,
+      "yPos": 140,
+      "cropWidth": 600,
+      "cropHeight": 720,
+      "doResize": true,
+      "scaledWidth": 500,
+      "scaledHeight": 600,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "minRatio > maxRatio should not be auto-corrected",
+    "input": {
+      "imageSize": { "width": 600, "height": 1000 },
+      "cropInfo": {
+        "width": 500,
+        "minRatioX": 12,
+        "minRatioY": 10,
+        "maxRatioX": 10,
+        "maxRatioY": 12
+      }
+    },
+    "expected": null
+  },
+
+  {
+    "name": "Cropping points are rounded up/down to nearast integer",
+    "input": {
+      "imageSize": { "width": 1000, "height": 1000 },
+      "cropInfo": {
+        "width": 500,
+        "minRatioX": 3,
+        "minRatioY": 2,
+        "maxRatioX": 3,
+        "maxRatioY": 2
+      }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 0,
+      "yPos": 167,
+      "cropWidth": 1000,
+      "cropHeight": 667,
+      "doResize": true,
+      "scaledWidth": 500,
+      "scaledHeight": 333,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Cropping points are rounded up/down to nearast integer",
+    "input": {
+      "imageSize": { "width": 1000, "height": 1000 },
+      "cropInfo": {
+        "width": 500,
+        "minRatioX": 3,
+        "minRatioY": 1,
+        "maxRatioX": 3,
+        "maxRatioY": 1
+      }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 0,
+      "yPos": 333,
+      "cropWidth": 1000,
+      "cropHeight": 333,
+      "doResize": true,
+      "scaledWidth": 500,
+      "scaledHeight": 167,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Image Aspect ratio is within min/max Ratio bounds - no cropping",
+    "input": {
+      "imageSize": { "width": 1000, "height": 600 },
+      "cropInfo": {
+        "width": 500,
+        "minRatioX": 1,
+        "minRatioY": 2,
+        "maxRatioX": 2,
+        "maxRatioY": 1
+      }
+    },
+    "expected": {
+      "doCrop": false,
+      "doResize": true,
+      "scaledWidth": 500,
+      "scaledHeight": 300,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Image Aspect ratio is same as minRatio - no cropping",
+    "input": {
+      "imageSize": { "width": 600, "height": 1000 },
+      "cropInfo": {
+        "width": 500,
+        "minRatioX": 600,
+        "minRatioY": 1000,
+        "maxRatioX": 1000,
+        "maxRatioY": 600
+      }
+    },
+    "expected": {
+      "doCrop": false,
+      "doResize": true,
+      "scaledWidth": 500,
+      "scaledHeight": 833,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Image Aspect ratio is same as maxRatio - no cropping",
+    "input": {
+      "imageSize": { "width": 1000, "height": 600 },
+      "cropInfo": {
+        "width": 500,
+        "minRatioX": 600,
+        "minRatioY": 1000,
+        "maxRatioX": 1000,
+        "maxRatioY": 600
+      }
+    },
+    "expected": {
+      "doCrop": false,
+      "doResize": true,
+      "scaledWidth": 500,
+      "scaledHeight": 300,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Off-center focal point moves cropping proportionally",
+    "input": {
+      "imageSize": { "width": 1000, "height": 1000 },
+      "cropInfo": {
+        "width": 500,
+        "minRatioX": 3,
+        "minRatioY": 2,
+        "maxRatioX": 3,
+        "maxRatioY": 2
+      },
+      "focalPoint": { "fx": 33, "fy": 33 }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 0,
+      "yPos": 110,
+      "cropWidth": 1000,
+      "cropHeight": 667,
+      "doResize": true,
+      "scaledWidth": 500,
+      "scaledHeight": 333,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Off-center focal point moves cropping proportionally",
+    "input": {
+      "imageSize": { "width": 1000, "height": 1000 },
+      "cropInfo": {
+        "width": 500,
+        "minRatioX": 2,
+        "minRatioY": 3,
+        "maxRatioX": 2,
+        "maxRatioY": 3
+      },
+      "focalPoint": { "fx": 25, "fy": 25 }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 83,
+      "yPos": 0,
+      "cropWidth": 667,
+      "cropHeight": 1000,
+      "doResize": true,
+      "scaledWidth": 500,
+      "scaledHeight": 750,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Original image is too narrow to fully match aspect ratio after scaling",
+    "input": {
+      "imageSize": { "width": 500, "height": 1000 },
+      "cropInfo": {
+        "height": 500,
+        "minRatioX": 2,
+        "minRatioY": 1,
+        "maxRatioX": 2,
+        "maxRatioY": 1
+      }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 0,
+      "yPos": 250,
+      "cropWidth": 500,
+      "cropHeight": 500,
+      "doResize": false,
+      "tooSmall": true,
+      "targetWidth": 1000,
+      "targetHeight": 500
+    }
+  },
+
+  {
+    "name": "Off-size bounding-box defines scaling results",
+    "input": {
+      "imageSize": { "width": 800, "height": 1000 },
+      "cropInfo": {
+        "width": 1000,
+        "height": 300,
+        "minRatioX": 2,
+        "minRatioY": 1,
+        "maxRatioX": 2,
+        "maxRatioY": 1
+      }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 0,
+      "yPos": 300,
+      "cropWidth": 800,
+      "cropHeight": 400,
+      "doResize": true,
+      "scaledWidth": 600,
+      "scaledHeight": 300,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Original image is too narrow for cropping",
+    "input": {
+      "imageSize": { "width": 500, "height": 1000 },
+      "cropInfo": {
+        "height": 1000,
+        "minRatioX": 2,
+        "minRatioY": 1,
+        "maxRatioX": 2,
+        "maxRatioY": 1
+      }
+    },
+    "expected": {
+      "doResize": false,
+      "doCrop": false,
+      "tooSmall": true,
+      "targetWidth": 2000,
+      "targetHeight": 1000
+    }
+  },
+
+  {
+    "name": "Original image is too small for cropping",
+    "input": {
+      "imageSize": { "width": 500, "height": 1000 },
+      "cropInfo": {
+        "height": 1200,
+        "minRatioX": 2,
+        "minRatioY": 1,
+        "maxRatioX": 2,
+        "maxRatioY": 1
+      }
+    },
+    "expected": {
+      "doResize": false,
+      "doCrop": false,
+      "tooSmall": true,
+      "targetWidth": 2400,
+      "targetHeight": 1200
+    }
+  },
+
+  {
+    "name": "Defined rectangle that fits within crop result has no effect (without snapTo parameter)",
+    "input": {
+      "imageSize": { "width": 1000, "height": 800 },
+      "cropInfo": {
+        "width": 500,
+        "minRatioX": 2,
+        "minRatioY": 1,
+        "maxRatioX": 2,
+        "maxRatioY": 1
+      },
+      "focalPoint": { "fx": 25, "fy": 25, "r1x": 15, "r1y": 15, "r2x": 30, "r2y": 30 }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 0,
+      "yPos": 75,
+      "cropWidth": 1000,
+      "cropHeight": 500,
+      "doResize": true,
+      "scaledWidth": 500,
+      "scaledHeight": 250,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Defined rectangle DOES shift the cropping area (without snapTo).",
+    "input": {
+      "imageSize": { "width": 1000, "height": 800 },
+      "cropInfo": {
+        "width": 500,
+        "minRatioX": 2,
+        "minRatioY": 1,
+        "maxRatioX": 2,
+        "maxRatioY": 1
+      },
+      "focalPoint": { "fx": 25, "fy": 25, "r1x": 0, "r1y": 0, "r2x": 30, "r2y": 30 }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 0,
+      "yPos": 0,
+      "cropWidth": 1000,
+      "cropHeight": 500,
+      "doResize": true,
+      "scaledWidth": 500,
+      "scaledHeight": 250,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Defined rectangle also shifts cropping down (without snapTo).",
+    "input": {
+      "imageSize": { "width": 1000, "height": 800 },
+      "cropInfo": {
+        "width": 500,
+        "minRatioX": 2,
+        "minRatioY": 1,
+        "maxRatioX": 2,
+        "maxRatioY": 1
+      },
+      "focalPoint": { "fx": 75, "fy": 75, "r1x": 70, "r1y": 70, "r2x": 100, "r2y": 100 }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 0,
+      "yPos": 300,
+      "cropWidth": 1000,
+      "cropHeight": 500,
+      "doResize": true,
+      "scaledWidth": 500,
+      "scaledHeight": 250,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Defined rectangle also shifts cropping right (without snapTo).",
+    "input": {
+      "imageSize": { "width": 1000, "height": 800 },
+      "cropInfo": {
+        "height": 400,
+        "minRatioX": 1,
+        "minRatioY": 2,
+        "maxRatioX": 1,
+        "maxRatioY": 2
+      },
+      "focalPoint": { "fx": 75, "fy": 75, "r1x": 70, "r1y": 70, "r2x": 100, "r2y": 100 }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 600,
+      "yPos": 0,
+      "cropWidth": 400,
+      "cropHeight": 800,
+      "doResize": true,
+      "scaledWidth": 200,
+      "scaledHeight": 400,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Focal point influences rectangle shifting (not here though, reference case)",
+    "input": {
+      "imageSize": { "width": 1000, "height": 800 },
+      "cropInfo": {
+        "height": 400,
+        "minRatioX": 1,
+        "minRatioY": 2,
+        "maxRatioX": 1,
+        "maxRatioY": 2
+      },
+      "focalPoint": { "fx": 50, "fy": 50, "r1x": 10, "r1y": 10, "r2x": 90, "r2y": 90 }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 300,
+      "yPos": 0,
+      "cropWidth": 400,
+      "cropHeight": 800,
+      "doResize": true,
+      "scaledWidth": 200,
+      "scaledHeight": 400,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Focal point influences rectangle shifting (to the left)",
+    "input": {
+      "imageSize": { "width": 1000, "height": 800 },
+      "cropInfo": {
+        "height": 400,
+        "minRatioX": 1,
+        "minRatioY": 2,
+        "maxRatioX": 1,
+        "maxRatioY": 2
+      },
+      "focalPoint": { "fx": 10, "fy": 10, "r1x": 10, "r1y": 10, "r2x": 90, "r2y": 90 }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 100,
+      "yPos": 0,
+      "cropWidth": 400,
+      "cropHeight": 800,
+      "doResize": true,
+      "scaledWidth": 200,
+      "scaledHeight": 400,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Focal point influences rectangle shifting (to the right)",
+    "input": {
+      "imageSize": { "width": 1000, "height": 800 },
+      "cropInfo": {
+        "height": 400,
+        "minRatioX": 1,
+        "minRatioY": 2,
+        "maxRatioX": 1,
+        "maxRatioY": 2
+      },
+      "focalPoint": { "fx": 90, "fy": 90, "r1x": 10, "r1y": 10, "r2x": 90, "r2y": 90 }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 500,
+      "yPos": 0,
+      "cropWidth": 400,
+      "cropHeight": 800,
+      "doResize": true,
+      "scaledWidth": 200,
+      "scaledHeight": 400,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Focal point influences rectangle shifting (up)",
+    "input": {
+      "imageSize": { "width": 1000, "height": 800 },
+      "cropInfo": {
+        "width": 500,
+        "minRatioX": 2,
+        "minRatioY": 1,
+        "maxRatioX": 2,
+        "maxRatioY": 1
+      },
+      "focalPoint": { "fx": 10, "fy": 10, "r1x": 10, "r1y": 10, "r2x": 90, "r2y": 90 }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 0,
+      "yPos": 80,
+      "cropWidth": 1000,
+      "cropHeight": 500,
+      "doResize": true,
+      "scaledWidth": 500,
+      "scaledHeight": 250,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Focal point influences rectangle shifting (down)",
+    "input": {
+      "imageSize": { "width": 1000, "height": 800 },
+      "cropInfo": {
+        "width": 500,
+        "minRatioX": 2,
+        "minRatioY": 1,
+        "maxRatioX": 2,
+        "maxRatioY": 1
+      },
+      "focalPoint": { "fx": 90, "fy": 90, "r1x": 10, "r1y": 10, "r2x": 90, "r2y": 90 }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 0,
+      "yPos": 220,
+      "cropWidth": 1000,
+      "cropHeight": 500,
+      "doResize": true,
+      "scaledWidth": 500,
+      "scaledHeight": 250,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Defined rectangle does not affect ratio (here without snapTo).",
+    "input": {
+      "imageSize": { "width": 1000, "height": 800 },
+      "cropInfo": {
+        "width": 500,
+        "minRatioX": 2,
+        "minRatioY": 1,
+        "maxRatioX": 2,
+        "maxRatioY": 1
+      },
+      "focalPoint": { "fx": 75, "fy": 75, "r1x": 10, "r1y": 10, "r2x": 100, "r2y": 100 }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 0,
+      "yPos": 239,
+      "cropWidth": 1000,
+      "cropHeight": 500,
+      "doResize": true,
+      "scaledWidth": 500,
+      "scaledHeight": 250,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Simple 150% zoom",
+    "input": {
+      "imageSize": { "width": 1000, "height": 500 },
+      "cropInfo": {
+        "width": 500,
+        "zoom": 150
+      },
+      "focalPoint": { "fx": 50, "fy": 50 }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 167,
+      "yPos": 83,
+      "cropWidth": 667,
+      "cropHeight": 333,
+      "doResize": true,
+      "scaledWidth": 500,
+      "scaledHeight": 250,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Zoom follows focal point around",
+    "input": {
+      "imageSize": { "width": 1000, "height": 500 },
+      "cropInfo": {
+        "width": 500,
+        "zoom": 150
+      },
+      "focalPoint": { "fx": 25, "fy": 75 }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 83,
+      "yPos": 125,
+      "cropWidth": 667,
+      "cropHeight": 333,
+      "doResize": true,
+      "scaledWidth": 500,
+      "scaledHeight": 250,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Focal point should default to center of image while zooming",
+    "input": {
+      "imageSize": { "width": 1000, "height": 500 },
+      "cropInfo": {
+        "width": 500,
+        "zoom": 150
+      }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 167,
+      "yPos": 83,
+      "cropWidth": 667,
+      "cropHeight": 333,
+      "doResize": true,
+      "scaledWidth": 500,
+      "scaledHeight": 250,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Zoom is limited by original image size",
+    "input": {
+      "imageSize": { "width": 1000, "height": 500 },
+      "cropInfo": {
+        "width": 700,
+        "zoom": 250
+      },
+      "focalPoint": { "fx": 50, "fy": 50 }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 150,
+      "yPos": 75,
+      "cropWidth": 700,
+      "cropHeight": 350,
+      "doResize": false,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Zoom is limited by original image size",
+    "input": {
+      "imageSize": { "width": 1000, "height": 500 },
+      "cropInfo": {
+        "height": 350,
+        "zoom": 200
+      }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 150,
+      "yPos": 75,
+      "cropWidth": 700,
+      "cropHeight": 350,
+      "doResize": false,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Zoom is limited by original image size",
+    "input": {
+      "imageSize": { "width": 1000, "height": 500 },
+      "cropInfo": {
+        "width": 700,
+        "height": 450,
+        "zoom": 250
+      }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 150,
+      "yPos": 75,
+      "cropWidth": 700,
+      "cropHeight": 350,
+      "doResize": false,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Zoom is limited by original image size",
+    "input": {
+      "imageSize": { "width": 1000, "height": 500 },
+      "cropInfo": {
+        "width": 1000,
+        "zoom": 250
+      }
+    },
+    "expected": {
+      "doCrop": false,
+      "doResize": false,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Zoom is limited by original image size",
+    "input": {
+      "imageSize": { "width": 1000, "height": 500 },
+      "cropInfo": {
+        "width": 1000,
+        "height": 1000,
+        "zoom": 250
+      }
+    },
+    "expected": {
+      "doCrop": false,
+      "doResize": false,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Combination of rectangle+snapTo (zoom-box) overrides any zoom level value",
+    "input": {
+      "imageSize": { "width": 1000, "height": 500 },
+      "cropInfo": {
+        "width": 300,
+        "zoom": 100,
+        "snapTo": true
+      },
+      "focalPoint": { "fx": 40, "fy": 30, "r1x": 20, "r1y": 10, "r2x": 60, "r2y": 50 }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 200,
+      "yPos": 50,
+      "cropWidth": 400,
+      "cropHeight": 200,
+      "doResize": true,
+      "scaledWidth": 300,
+      "scaledHeight": 150,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Defined rectangle (without snapTo) limits zoom level value",
+    "input": {
+      "imageSize": { "width": 1000, "height": 1000 },
+      "cropInfo": {
+        "width": 250,
+        "zoom": 500
+      },
+      "focalPoint": { "fx": 50, "fy": 50, "r1x": 10, "r1y": 10, "r2x": 90, "r2y": 90 }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 100,
+      "yPos": 100,
+      "cropWidth": 800,
+      "cropHeight": 800,
+      "doResize": true,
+      "scaledWidth": 250,
+      "scaledHeight": 250,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Defined rectangle (without snapTo) limits zoom level value but respects cropping and doesn't cause rattling!!!!!!1°",
+    "input": {
+      "imageSize": { "width": 1000, "height": 1000 },
+      "cropInfo": {
+        "width": 250,
+        "zoom": 500,
+        "minRatioX": 2,
+        "minRatioY": 1,
+        "maxRatioX": 2,
+        "maxRatioY": 1
+      },
+      "focalPoint": { "fx": 50, "fy": 50, "r1x": 10, "r1y": 10, "r2x": 90, "r2y": 90 }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 0,
+      "yPos": 250,
+      "cropWidth": 1000,
+      "cropHeight": 500,
+      "doResize": true,
+      "scaledWidth": 250,
+      "scaledHeight": 125,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Defined rectangle (without snapTo) limits zoom level value but respects cropping and doesn't cause rattling!!!!!!1° and also respects the focal point",
+    "input": {
+      "imageSize": { "width": 1000, "height": 1000 },
+      "cropInfo": {
+        "width": 250,
+        "zoom": 500,
+        "minRatioX": 2,
+        "minRatioY": 1,
+        "maxRatioX": 2,
+        "maxRatioY": 1
+      },
+      "focalPoint": { "fx": 50, "fy": 15, "r1x": 10, "r1y": 10, "r2x": 90, "r2y": 90 }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 0,
+      "yPos": 119,
+      "cropWidth": 1000,
+      "cropHeight": 500,
+      "doResize": true,
+      "scaledWidth": 250,
+      "scaledHeight": 125,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Combination of rectangle+snapTo (zoom-box) initiates zooming",
+    "input": {
+      "imageSize": { "width": 1000, "height": 500 },
+      "cropInfo": {
+        "width": 300,
+        "snapTo": true
+      },
+      "focalPoint": { "fx": 40, "fy": 30, "r1x": 20, "r1y": 10, "r2x": 60, "r2y": 50 }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 200,
+      "yPos": 50,
+      "cropWidth": 400,
+      "cropHeight": 200,
+      "doResize": true,
+      "scaledWidth": 300,
+      "scaledHeight": 150,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Rectangle+snapTo overrides any zoom level value",
+    "input": {
+      "imageSize": { "width": 1000, "height": 500 },
+      "cropInfo": {
+        "width": 300,
+        "zoom": 500,
+        "snapTo": true
+      },
+      "focalPoint": { "fx": 40, "fy": 30, "r1x": 20, "r1y": 10, "r2x": 60, "r2y": 50 }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 200,
+      "yPos": 50,
+      "cropWidth": 400,
+      "cropHeight": 200,
+      "doResize": true,
+      "scaledWidth": 300,
+      "scaledHeight": 150,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Rectangle+snapTo overrides any zoom level value (while maintaining original aspect ratio)",
+    "input": {
+      "imageSize": { "width": 1000, "height": 500 },
+      "cropInfo": {
+        "width": 300,
+        "zoom": 100,
+        "snapTo": true
+      },
+      "focalPoint": { "fx": 40, "fy": 30, "r1x": 30, "r1y": 10, "r2x": 50, "r2y": 50 }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 240,
+      "yPos": 50,
+      "cropWidth": 400,
+      "cropHeight": 200,
+      "doResize": true,
+      "scaledWidth": 300,
+      "scaledHeight": 150,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Rectangle (without snapTo) contained after zoom does not override zoom level value",
+    "input": {
+      "imageSize": { "width": 1000, "height": 500 },
+      "cropInfo": {
+        "width": 300,
+        "zoom": 100
+      },
+      "focalPoint": { "fx": 40, "fy": 30, "r1x": 30, "r1y": 10, "r2x": 50, "r2y": 50 }
+    },
+    "expected": {
+      "doCrop": false,
+      "doResize": true,
+      "scaledWidth": 300,
+      "scaledHeight": 150,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Focal point position relative to rectangle+snapTo affects crop-box-position",
+    "input": {
+      "imageSize": { "width": 1000, "height": 500 },
+      "cropInfo": {
+        "width": 300,
+        "snapTo": true
+      },
+      "focalPoint": { "fx": 35, "fy": 20, "r1x": 30, "r1y": 10, "r2x": 50, "r2y": 50 }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 210,
+      "yPos": 50,
+      "cropWidth": 400,
+      "cropHeight": 200,
+      "doResize": true,
+      "scaledWidth": 300,
+      "scaledHeight": 150,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Rectangle+snapTo (zoom-box boundries) interacts with focal-point",
+    "input": {
+      "imageSize": { "width": 1000, "height": 1000 },
+      "cropInfo": {
+        "height": 300,
+        "snapTo": true
+      },
+      "focalPoint": { "fx": 40, "fy": 40, "r1x": 5, "r1y": 20, "r2x": 40, "r2y": 60 }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 50,
+      "yPos": 200,
+      "cropWidth": 400,
+      "cropHeight": 400,
+      "doResize": true,
+      "scaledWidth": 300,
+      "scaledHeight": 300,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Zooming towards 'zoom-box' is limited by size of the original image",
+    "input": {
+      "imageSize": { "width": 1000, "height": 500 },
+      "cropInfo": {
+        "width": 800,
+        "zoom": 500,
+        "snapTo": true
+      },
+      "focalPoint": { "fx": 40, "fy": 30, "r1x": 30, "r1y": 10, "r2x": 50, "r2y": 50 }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 80,
+      "yPos": 30,
+      "cropWidth": 800,
+      "cropHeight": 400,
+      "doResize": false,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Zooming towards 'zoom-box' is limited by size of the original image",
+    "input": {
+      "imageSize": { "width": 1000, "height": 500 },
+      "cropInfo": {
+        "width": 1000,
+        "zoom": 500
+      },
+      "focalPoint": { "fx": 40, "fy": 30, "r1x": 30, "r1y": 10, "r2x": 50, "r2y": 50 }
+    },
+    "expected": {
+      "doCrop": false,
+      "doResize": false,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Zooming combines nicely with aspect-ratio",
+    "input": {
+      "imageSize": { "width": 1000, "height": 1000 },
+      "cropInfo": {
+        "width": 300,
+        "zoom": 200,
+        "minRatioX": 2,
+        "minRatioY": 1,
+        "maxRatioX": 2,
+        "maxRatioY": 1
+      }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 250,
+      "yPos": 375,
+      "cropWidth": 500,
+      "cropHeight": 250,
+      "doResize": true,
+      "scaledWidth": 300,
+      "scaledHeight": 150,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Zooming combines nicely with aspect-ratio and focal-point",
+    "input": {
+      "imageSize": { "width": 1000, "height": 1000 },
+      "cropInfo": {
+        "width": 300,
+        "zoom": 200,
+        "minRatioX": 2,
+        "minRatioY": 1,
+        "maxRatioX": 2,
+        "maxRatioY": 1
+      },
+      "focalPoint": { "fx": 25, "fy": 75 }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 125,
+      "yPos": 563,
+      "cropWidth": 500,
+      "cropHeight": 250,
+      "doResize": true,
+      "scaledWidth": 300,
+      "scaledHeight": 150,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Aspect ratio and original image size limit zooming",
+    "input": {
+      "imageSize": { "width": 1000, "height": 1000 },
+      "cropInfo": {
+        "width": 800,
+        "zoom": 200,
+        "minRatioX": 2,
+        "minRatioY": 1,
+        "maxRatioX": 2,
+        "maxRatioY": 1
+      }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 100,
+      "yPos": 300,
+      "cropWidth": 800,
+      "cropHeight": 400,
+      "doResize": false,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Aspect ratio and original image size limit zooming",
+    "input": {
+      "imageSize": { "width": 1000, "height": 1000 },
+      "cropInfo": {
+        "height": 800,
+        "zoom": 200,
+        "minRatioX": 1,
+        "minRatioY": 2,
+        "maxRatioX": 1,
+        "maxRatioY": 2
+      }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 300,
+      "yPos": 100,
+      "cropWidth": 400,
+      "cropHeight": 800,
+      "doResize": false,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Rectangle+snapTo (zoom box) combines nicely with aspect-ratio",
+    "input": {
+      "imageSize": { "width": 1000, "height": 1000 },
+      "cropInfo": {
+        "height": 300,
+        "zoom": 100,
+        "minRatioX": 2,
+        "minRatioY": 1,
+        "maxRatioX": 2,
+        "maxRatioY": 1,
+        "snapTo": true
+      },
+      "focalPoint": { "fx": 40, "fy": 40, "r1x": 5, "r1y": 20, "r2x": 40, "r2y": 60 }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 50,
+      "yPos": 200,
+      "cropWidth": 800,
+      "cropHeight": 400,
+      "doResize": true,
+      "scaledWidth": 600,
+      "scaledHeight": 300,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Rectangle (without snapTo) does not interfere with zoom and aspect-ratio",
+    "input": {
+      "imageSize": { "width": 1000, "height": 1000 },
+      "cropInfo": {
+        "height": 300,
+        "zoom": 100,
+        "minRatioX": 2,
+        "minRatioY": 1,
+        "maxRatioX": 2,
+        "maxRatioY": 1
+      },
+      "focalPoint": { "fx": 40, "fy": 40, "r1x": 5, "r1y": 20, "r2x": 40, "r2y": 60 }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 0,
+      "yPos": 200,
+      "cropWidth": 1000,
+      "cropHeight": 500,
+      "doResize": true,
+      "scaledWidth": 600,
+      "scaledHeight": 300,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Aspect ratio cropping trumps Rectangle+snapTo",
+    "input": {
+      "imageSize": { "width": 1000, "height": 1000 },
+      "cropInfo": {
+        "width": 500,
+        "zoom": 200,
+        "minRatioX": 2,
+        "minRatioY": 1,
+        "maxRatioX": 2,
+        "maxRatioY": 1,
+        "snapTo": true
+      },
+      "focalPoint": { "fx": 40, "fy": 30, "r1x": 30, "r1y": 10, "r2x": 50, "r2y": 90 }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 0,
+      "yPos": 175,
+      "cropWidth": 1000,
+      "cropHeight": 500,
+      "doResize": true,
+      "scaledWidth": 500,
+      "scaledHeight": 250,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Aspect ratio cropping trumps Rectangle+snapTo - vertical",
+    "input": {
+      "imageSize": { "width": 1000, "height": 1000 },
+      "cropInfo": {
+        "height": 500,
+        "zoom": 200,
+        "minRatioX": 1,
+        "minRatioY": 2,
+        "maxRatioX": 1,
+        "maxRatioY": 2,
+        "snapTo": true
+      },
+      "focalPoint": { "fx": 40, "fy": 30, "r1x": 6, "r1y": 30, "r2x": 86, "r2y": 50 }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 188,
+      "yPos": 0,
+      "cropWidth": 500,
+      "cropHeight": 1000,
+      "doResize": true,
+      "scaledWidth": 250,
+      "scaledHeight": 500,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Original image size trumps both zoom-box and crop aspect-ratio",
+    "input": {
+      "imageSize": { "width": 1000, "height": 1000 },
+      "cropInfo": {
+        "height": 1000,
+        "zoom": 200,
+        "minRatioX": 2,
+        "minRatioY": 1,
+        "maxRatioX": 2,
+        "maxRatioY": 1
+      },
+      "focalPoint": { "fx": 40, "fy": 30, "r1x": 10, "r1y": 30, "r2x": 90, "r2y": 50 }
+    },
+    "expected": {
+      "doCrop": false,
+      "doResize": false,
+      "tooSmall": true,
+      "targetWidth": 2000,
+      "targetHeight": 1000
+    }
+  },
+
+  {
+    "name": "Original image resolution limits the 'snap-to' zoom level",
+    "comments": " imageRatio: 1,50132625994695 ",
+    "input": {
+      "imageSize": { "width": 1698, "height": 1131 },
+      "cropInfo": {
+        "width": 400,
+        "height": 400,
+        "snapTo": true
+      },
+      "focalPoint": { "fx": 50, "fy": 50, "r1x": 45, "r1y": 45, "r2x": 55, "r2y": 55 }
+    },
+    "expected": {
+      "doCrop": true,
+      "doResize": false,
+      "tooSmall": false,
+      "xPos": 649,
+      "yPos": 432,
+      "cropWidth": 400,
+      "cropHeight": 266
+    }
+  },
+
+  {
+    "name": "Test test",
+    "input": {
+      "imageSize": { "width": 718, "height": 120 },
+      "cropInfo": {
+        "width": 400,
+        "height": 400,
+        "zoom": 250,
+        "minRatioX": 3,
+        "minRatioY": 4,
+        "maxRatioX": 3,
+        "maxRatioY": 4
+      }
+    },
+    "expected": {
+      "doCrop": true,
+      "doResize": false,
+      "tooSmall": true,
+      "targetWidth": 300,
+      "targetHeight": 400,
+      "cropWidth": 300,
+      "cropHeight": 120,
+      "xPos": 209,
+      "yPos": 0
+    }
+  },
+
+  {
+    "name": "Image too small in one dimension",
+    "input": {
+      "imageSize": { "width": 670, "height": 292 },
+      "cropInfo": {
+        "width": 300,
+        "height": 900,
+        "minRatioX": 1,
+        "minRatioY": 4.5,
+        "maxRatioX": 1,
+        "maxRatioY": 4.5
+      }
+    },
+    "expected": {
+      "doCrop": true,
+      "doResize": false,
+      "tooSmall": true,
+      "targetWidth": 200,
+      "targetHeight": 900,
+      "cropWidth": 200,
+      "cropHeight": 292,
+      "xPos": 235,
+      "yPos": 0
+    }
+  },
+
+  {
+    "dolog": false,
+    "name": "Image too small in one dimension - one scaleTo undefined - nozoom",
+    "input": {
+      "imageSize": { "width": 670, "height": 292 },
+      "cropInfo": {
+        "height": 900,
+        "minRatioX": 1,
+        "minRatioY": 4.5,
+        "maxRatioX": 1,
+        "maxRatioY": 4.5
+      }
+    },
+    "expected": {
+      "doCrop": true,
+      "doResize": false,
+      "tooSmall": true,
+      "targetWidth": 200,
+      "targetHeight": 900,
+      "cropWidth": 200,
+      "cropHeight": 292,
+      "xPos": 235,
+      "yPos": 0
+    }
+  },
+
+  {
+    "dolog": false,
+    "name": "Image too small in one dimension - one scaleTo undefined - nozoom - rotated",
+    "input": {
+      "imageSize": { "width": 292, "height": 670 },
+      "cropInfo": {
+        "width": 900,
+        "minRatioX": 4.5,
+        "minRatioY": 1,
+        "maxRatioX": 4.5,
+        "maxRatioY": 1
+      }
+    },
+    "expected": {
+      "doCrop": true,
+      "doResize": false,
+      "tooSmall": true,
+      "targetWidth": 900,
+      "targetHeight": 200,
+      "cropWidth": 292,
+      "cropHeight": 200,
+      "xPos": 0,
+      "yPos": 235
+    }
+  },
+
+  {
+    "dolog": false,
+    "name": "Image too small in one dimension - one scaleTo undefined",
+    "input": {
+      "imageSize": { "width": 670, "height": 292 },
+      "cropInfo": {
+        "height": 900,
+        "zoom": 250,
+        "minRatioX": 1,
+        "minRatioY": 4.5,
+        "maxRatioX": 1,
+        "maxRatioY": 4.5
+      }
+    },
+    "expected": {
+      "doCrop": true,
+      "doResize": false,
+      "tooSmall": true,
+      "targetWidth": 200,
+      "targetHeight": 900,
+      "cropWidth": 200,
+      "cropHeight": 292,
+      "xPos": 235,
+      "yPos": 0
+    }
+  },
+
+  {
+    "dolog": false,
+    "name": "Image too small in one dimension - one scaleTo undefined - rotated",
+    "input": {
+      "imageSize": { "width": 292, "height": 670 },
+      "cropInfo": {
+        "width": 900,
+        "zoom": 250,
+        "minRatioX": 4.5,
+        "minRatioY": 1,
+        "maxRatioX": 4.5,
+        "maxRatioY": 1
+      }
+    },
+    "expected": {
+      "doCrop": true,
+      "doResize": false,
+      "tooSmall": true,
+      "targetWidth": 900,
+      "targetHeight": 200,
+      "cropWidth": 292,
+      "cropHeight": 200,
+      "xPos": 0,
+      "yPos": 235
+    }
+  },
+
+  {
+    "dolog": false,
+    "name": "focalArea extends over 98% of image - with snapTo",
+    "input": {
+      "imageSize": { "width": 1920, "height": 688 },
+      "cropInfo": {
+        "width": 200,
+        "height": 200,
+        "snapTo": true,
+        "minRatioX": 1,
+        "minRatioY": 1,
+        "maxRatioX": 1,
+        "maxRatioY": 1
+      },
+      "focalPoint": { "fx": 50, "fy": 40, "r1x": 1, "r1y": 0, "r2x": 99, "r2y": 80 }
+    },
+    "expected": {
+      "doCrop": true,
+      "doResize": true,
+      "tooSmall": false,
+      "cropWidth": 688,
+      "cropHeight": 688,
+      "xPos": 616,
+      "yPos": 0,
+      "scaledWidth": 200,
+      "scaledHeight": 200
+    }
+  },
+
+  {
+    "dolog": false,
+    "name": "focalArea extends over 100% of image - with snapTo",
+    "input": {
+      "imageSize": { "width": 1920, "height": 688 },
+      "cropInfo": {
+        "width": 200,
+        "height": 200,
+        "snapTo": true,
+        "minRatioX": 1,
+        "minRatioY": 1,
+        "maxRatioX": 1,
+        "maxRatioY": 1
+      },
+      "focalPoint": { "fx": 25, "fy": 40, "r1x": 0, "r1y": 0, "r2x": 100, "r2y": 80 }
+    },
+    "expected": {
+      "doCrop": true,
+      "doResize": true,
+      "tooSmall": false,
+      "cropWidth": 688,
+      "cropHeight": 688,
+      "xPos": 308,
+      "yPos": 0,
+      "scaledWidth": 200,
+      "scaledHeight": 200
+    }
+  }
+]
