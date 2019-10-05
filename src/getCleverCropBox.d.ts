@@ -1,9 +1,9 @@
-type ImageInfo = {
+export type ImageDimensions = {
   width: number;
   height: number;
 };
 
-type CropOpts = {
+export type CropOpts = {
   width?: number;
   height?: number;
   zoom?: number;
@@ -17,17 +17,18 @@ type CropOpts = {
       maxRatioY: number;
     });
 
-type FocalPointOpts = {
+export type FocalXY = {
   fx: number;
   fy: number;
-} & (
-  | {}
-  | {
-      r1x: number;
-      r1y: number;
-      r2x: number;
-      r2y: number;
-    });
+};
+export type FocalArea = {
+  r1x: number;
+  r1y: number;
+  r2x: number;
+  r2y: number;
+};
+
+export type FocalPointOpts = FocalXY & (FocalArea | {});
 
 // --------------------------------------------------------------------------
 
@@ -59,12 +60,12 @@ type CroppingTarget =
       yPos: number;
     };
 
-type CleverCropTargets = ScalingTarget & CroppingTarget;
+export type CleverCropTargets = ScalingTarget & CroppingTarget;
 
 // --------------------------------------------------------------------------
 
 export default function getCleverCropBox(
-  origSize: ImageInfo,
+  origSize: ImageDimensions,
   cropInfo: CropOpts,
   focalPoint?: FocalPointOpts
 ): null | CleverCropTargets;
