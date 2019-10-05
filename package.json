@@ -1,6 +1,6 @@
 {
   "name": "@hugsmidjan/getclevercropbox",
-  "version": "1.0.0",
+  "version": "1.1.0",
 	"main": "dist/getCleverCropBox.js",
 	"module": "src/getCleverCropBox.js",
 	"types": "src/getCleverCropBox.d.ts",

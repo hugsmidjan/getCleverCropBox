@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+
+## 1.1.0
+
+_2019-10-05_
+
 - feat: Export the input/output types
 
 ## 1.0.0
