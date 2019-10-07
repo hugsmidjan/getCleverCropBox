@@ -3,6 +3,7 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+- feat: Silently relax/remove all `isInt()` checks for inputs
 - fix: Correct function mis-naming in development log message
 - chore: Remove unused file cruft from package - improve build scripts
 
