@@ -4,6 +4,7 @@
 
 - ... <!-- Add new lines here. Version number will be decided later -->
 - fix: Correct function mis-naming in development log message
+- chore: Remove unused file cruft from package - improve build scripts
 
 ## 1.1.0
 

@@ -1,4 +1,5 @@
 const { parallel, series } = require('gulp');
+const del = require('del');
 const rollupTaskFactory = require('@hugsmidjan/gulp-rollup');
 
 const baseOpts = {
@@ -11,7 +12,7 @@ const baseOpts = {
 const [transpile, transpileWatch] = rollupTaskFactory({
   ...baseOpts,
   name: 'bundle_module',
-  glob: ['*.js'],
+  glob: ['*.js', '!**/*.tests.js'],
   dist: 'dist/',
 });
 
@@ -25,7 +26,9 @@ const [tests, testsWatch] = rollupTaskFactory({
   },
 });
 
-const build = parallel(transpile, tests);
+const cleanup = () => del(['dist', 'tests']);
+
+const build = parallel(cleanup, transpile, tests);
 const watch = parallel(transpileWatch, testsWatch);
 
 exports.dev = series(build, watch);
