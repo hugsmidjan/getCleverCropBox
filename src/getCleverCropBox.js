@@ -88,7 +88,7 @@ const getCleverCropBox = (origSize, cropInfo, focalPoint) => {
     (!isValid('cropInfo', cropInfo) && (invalid = cropInfo)) ||
     (focalPoint && !isValid('focalPoint', focalPoint) && (invalid = focalPoint))
   ) {
-    isDev && console.info('invalid determineCropBox params', invalid);
+    isDev && console.info('invalid getCleverCropBox() params', invalid);
     return null;
   }
 

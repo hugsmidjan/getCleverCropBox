@@ -3,6 +3,7 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+- fix: Correct function mis-naming in development log message
 
 ## 1.1.0
 
