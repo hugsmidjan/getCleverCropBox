@@ -2,57 +2,102 @@
 
 /* global process */
 
-
 var isNum = function (v) { return typeof v === 'number'; };
-var isInt = function (v) { return isNum(v) && Math.round(v) === v; };
+var isNumOrNull = function (v) { return v == null || typeof v === 'number'; };
+// const isNullOrBool = (v) => v == null || typeof v === 'number';
 
+// NOTE: we don't really care about integer checking
+var isInt = isNum; // (v) => isNum(v) && Math.round(v) === v;
+var isIntOrNull = isNumOrNull; // (v) => v == null || isInt(v);
+
+// NOTE: `isValidTypes()` is not really needed for applications written in TypeScript.
 // eslint-disable-next-line complexity
-var isValid = function (name, o) {
-  var ret = false;
-  if (name === 'origSize') {
-    ret /*true &&*/ =
-      isInt(o.width) && o.width > 0 && isInt(o.height) && o.height > 0 && true;
-  } else if (name === 'cropInfo') {
-    ret /*true &&*/ =
-      (o.width || o.height) &&
-      (o.width == null || (isInt(o.width) && o.width > 0)) &&
-      (o.height == null || (isInt(o.height) && o.height > 0)) &&
-      (o.zoom == null || (isInt(o.zoom) && o.zoom >= 100 && o.zoom < 1000)) &&
-      //(o.quality==null || (isInt(o.quality) && o.quality>=0 && o.quality<=100))  &&
-      // one or none should be defined (We may use ! becuase they're all > 0)
-      !!o.minRatioX === !!o.minRatioY &&
-      !!o.maxRatioX === !!o.maxRatioY &&
-      !!o.minRatioX === !!o.maxRatioX &&
-      (o.minRatioX == null || (isNum(o.minRatioX) && o.minRatioX > 0)) &&
-      (o.minRatioY == null || (isNum(o.minRatioY) && o.minRatioY > 0)) &&
-      (o.maxRatioX == null || (isNum(o.maxRatioX) && o.maxRatioX > 0)) &&
-      (o.maxRatioY == null || (isNum(o.maxRatioY) && o.maxRatioY > 0)) &&
-      (!o.minRatioX || o.minRatioX / o.minRatioY <= o.maxRatioX / o.maxRatioY) &&
-      (o.snapTo == null || typeof o.snapTo === 'boolean') &&
-      true;
-  } else if (name === 'focalPoint') {
-    ret /*true &&*/ =
-      isInt(o.fx) &&
-      o.fx >= 0 &&
-      o.fx <= 100 &&
-      isInt(o.fy) &&
-      o.fy >= 0 &&
-      o.fy <= 100 &&
-      // one or none should be defined
-      (o.r1x != null) === (o.r1y != null) &&
-      (o.r2x != null) === (o.r2y != null) &&
-      (o.r1x != null) === (o.r2x != null) &&
-      (o.r1x == null || (isInt(o.r1x) && o.r1x >= 0 && o.r1x <= 100)) &&
-      (o.r1y == null || (isInt(o.r1y) && o.r1y >= 0 && o.r1y <= 100)) &&
-      (o.r2x == null || (isInt(o.r2x) && o.r2x >= 0 && o.r2x <= 100)) &&
-      (o.r2y == null || (isInt(o.r2y) && o.r2y >= 0 && o.r2y <= 100)) &&
-      (o.r1x == null ||
-        (o.fx >= o.r1x && o.fx <= o.r2x && o.fy >= o.r1y && o.fy <= o.r2y)) &&
-      true;
+var isValidTypes = function (o, c, f) {
+  var valid = true;
+  if (!(isInt(o.width) && isInt(o.height))) {
+    valid = false;
   }
-  return ret;
+  if (
+    !(
+      isIntOrNull(c.width) &&
+      isIntOrNull(c.height) &&
+      isNumOrNull(c.zoom) &&
+      // all or none should be defined
+      ((!c.minRatioX && !c.minRatioY && !c.maxRatioX && !c.maxRatioY) ||
+        (isNum(c.minRatioX) &&
+          isNum(c.minRatioY) &&
+          isNum(c.maxRatioX) &&
+          isNum(c.maxRatioY)))
+    )
+  ) {
+    valid = false;
+  }
+  if (
+    f &&
+    !(
+      isNum(f.fx) &&
+      isNum(f.fy) &&
+      // all or none should be defined
+      ((!f.r1x && !f.r1y && !f.r2x && !f.r2y) ||
+        (isNum(f.r1x) && isNum(f.r1y) && isNum(f.r2x) && isNum(f.r2y)))
+    )
+  ) {
+    valid = false;
+  }
+  return valid;
 };
 
+// eslint-disable-next-line complexity
+var isValidValues = function (o, c, f) {
+  var valid = true;
+  if (!(o.width > 0 && o.height > 0)) {
+    valid = false;
+  }
+  if (
+    !(
+      (c.width || c.height) &&
+      (c.width == null || c.width > 0) &&
+      (c.height == null || c.height > 0) &&
+      (c.zoom == null || (c.zoom >= 100 && c.zoom < 1000)) &&
+      //(c.quality==null || (isNum(c.quality) && c.quality>=0 && c.quality<=100))  &&
+      // all or none are defined
+      (!c.minRatioX || // NOTE: We may use ! becuase they're all > 0
+        (c.minRatioX > 0 &&
+          c.minRatioY > 0 &&
+          c.maxRatioX > 0 &&
+          c.maxRatioY > 0 &&
+          // minRatio is smaller than maxRatio
+          c.minRatioX / c.minRatioY <= c.maxRatioX / c.maxRatioY))
+    )
+  ) {
+    valid = false;
+  }
+
+  if (
+    f &&
+    !(
+      f.fx >= 0 &&
+      f.fx <= 100 &&
+      f.fy >= 0 &&
+      f.fy <= 100 &&
+      // all or none are defined
+      (f.r1x == null ||
+        (f.r1x >= 0 &&
+          f.r1x <= 100 &&
+          f.r1y >= 0 &&
+          f.r1y <= 100 &&
+          f.r2x >= 0 &&
+          f.r2x <= 100 &&
+          f.r2y >= 0 &&
+          f.r2y <= 100 &&
+          // Focus point is within the focus rectangle
+          (f.fx >= f.r1x && f.fx <= f.r2x && f.fy >= f.r1y && f.fy <= f.r2y)))
+    )
+  ) {
+    valid = false;
+  }
+  return valid;
+};
 
 // ***************************************
 //  The juicy stuff:
@@ -83,11 +128,9 @@ var isValid = function (name, o) {
 
 // eslint-disable-next-line complexity
 var getCleverCropBox = function (origSize, cropInfo, focalPoint) {
-  var invalid;
   if (
-    (!isValid('origSize', origSize) && (invalid = origSize)) ||
-    (!isValid('cropInfo', cropInfo) && (invalid = cropInfo)) ||
-    (focalPoint && !isValid('focalPoint', focalPoint) && (invalid = focalPoint))
+    !isValidTypes(origSize, cropInfo, focalPoint) ||
+    !isValidValues(origSize, cropInfo, focalPoint)
   ) {
     return null;
   }
