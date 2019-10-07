@@ -1687,7 +1687,6 @@
   },
 
   {
-    "dolog": false,
     "name": "Image too small in one dimension - one scaleTo undefined - nozoom",
     "input": {
       "imageSize": { "width": 670, "height": 292 },
@@ -1713,7 +1712,6 @@
   },
 
   {
-    "dolog": false,
     "name": "Image too small in one dimension - one scaleTo undefined - nozoom - rotated",
     "input": {
       "imageSize": { "width": 292, "height": 670 },
@@ -1739,7 +1737,6 @@
   },
 
   {
-    "dolog": false,
     "name": "Image too small in one dimension - one scaleTo undefined",
     "input": {
       "imageSize": { "width": 670, "height": 292 },
@@ -1766,7 +1763,6 @@
   },
 
   {
-    "dolog": false,
     "name": "Image too small in one dimension - one scaleTo undefined - rotated",
     "input": {
       "imageSize": { "width": 292, "height": 670 },
@@ -1793,7 +1789,6 @@
   },
 
   {
-    "dolog": false,
     "name": "focalArea extends over 98% of image - with snapTo",
     "input": {
       "imageSize": { "width": 1920, "height": 688 },
@@ -1822,7 +1817,6 @@
   },
 
   {
-    "dolog": false,
     "name": "focalArea extends over 100% of image - with snapTo",
     "input": {
       "imageSize": { "width": 1920, "height": 688 },
