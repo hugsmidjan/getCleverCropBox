@@ -1,9 +1,0 @@
-{
-  "compilerOptions": {
-    "allowJs": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true // Don't be daft. Always be strict.
-	},
-	"exclude": ["node_modules"],
-	"include": ["src/*.d.ts"]
-}
