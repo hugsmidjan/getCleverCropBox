@@ -1,0 +1,109 @@
+[
+  {
+    "name": "Non-integer target size is tolerated + ignored",
+    "input": {
+      "imageSize": { "width": 1000, "height": 600 },
+      "cropInfo": {
+        "width": 300.5
+      }
+    },
+    "expected": {
+      "doResize": true,
+      "scaledWidth": 301,
+      "scaledHeight": 180,
+      "doCrop": false,
+      "tooSmall": false
+    }
+  },
+  {
+    "name": "Non-integer target size is tolerated + ignored",
+    "input": {
+      "imageSize": { "width": 1000, "height": 600 },
+      "cropInfo": {
+        "width": 300.49
+      }
+    },
+    "expected": {
+      "doResize": true,
+      "scaledWidth": 300,
+      "scaledHeight": 180,
+      "doCrop": false,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Non-integer zoom is tolerated",
+    "input": {
+      "imageSize": { "width": 1000, "height": 500 },
+      "cropInfo": {
+        "width": 500,
+        "zoom": 150.5
+      },
+      "focalPoint": { "fx": 50, "fy": 50 }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 168,
+      "yPos": 84,
+      "cropWidth": 664,
+      "cropHeight": 332,
+      "doResize": true,
+      "scaledWidth": 500,
+      "scaledHeight": 250,
+      "tooSmall": false
+    }
+  },
+
+  {
+    "name": "Non-integer focal point is tolerated",
+    "input": {
+      "imageSize": { "width": 1000, "height": 1000 },
+      "cropInfo": {
+        "width": 500,
+        "minRatioX": 3,
+        "minRatioY": 2,
+        "maxRatioX": 3,
+        "maxRatioY": 2
+      },
+      "focalPoint": { "fx": 33, "fy": 33.3 }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 0,
+      "yPos": 111,
+      "cropWidth": 1000,
+      "cropHeight": 667,
+      "doResize": true,
+      "scaledWidth": 500,
+      "scaledHeight": 333,
+      "tooSmall": false
+    }
+  },
+  {
+    "name": "Non-integer rectangle is tolerated",
+    "input": {
+      "imageSize": { "width": 1000, "height": 800 },
+      "cropInfo": {
+        "width": 500,
+        "zoom": 150,
+        "minRatioX": 2,
+        "minRatioY": 1,
+        "maxRatioX": 2,
+        "maxRatioY": 1
+      },
+      "focalPoint": { "fx": 25, "fy": 25, "r1x": 0.5, "r1y": 0.25, "r2x": 30, "r2y": 30 }
+    },
+    "expected": {
+      "doCrop": true,
+      "xPos": 5,
+      "yPos": 2,
+      "cropWidth": 667,
+      "cropHeight": 333,
+      "doResize": true,
+      "scaledWidth": 500,
+      "scaledHeight": 250,
+      "tooSmall": false
+    }
+  }
+]
